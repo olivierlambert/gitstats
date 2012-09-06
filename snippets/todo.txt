@@ -1,0 +1,5 @@
+- separate data and graphs
+- test it with hardcoded values
+- rewrite html in python code to generate proper pages
+- rewrite values in json
+- test it with real values
