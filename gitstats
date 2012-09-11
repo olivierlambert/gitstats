@@ -970,6 +970,8 @@ class HTMLReportCreator(ReportCreator):
 		print 'Generating graphs...'
 
 		# hour of day
+		
+		
 		f = open(path + '/hour_of_day.plot', 'w')
 		f.write(GNUPLOT_COMMON)
 		f.write(
