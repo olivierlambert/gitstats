@@ -22,18 +22,18 @@
 <li><a href="tags.html">Tags</a></li>
 </ul>
 </div>
+<!-- load the graph data -->
+<script src="graphs/activity/activity_data.js" type="text/javascript"></script>
 <!-- calculate the graphs -->
 <script src="graphs/activity/weekly.js" type="text/javascript"></script>
 <script src="graphs/activity/hourofday.js" type="text/javascript"></script>
 <script src="graphs/activity/dayofweek.js" type="text/javascript"></script>
 <script src="graphs/activity/monthofyear.js" type="text/javascript"></script>
-<script src="graphs/activity/year.js" type="text/javascript"></script>
 <script src="graphs/activity/timezone.js" type="text/javascript"></script>
 
 <h2><a href="#commits" name="commits">Commit activity</a></h2>
 
 <!-- render the graphs -->
-
 <div id="weekly" style="float: left; max-width: 600px; height: 400px;"></div>
 <div id="hourofday" style="float: left; max-width: 600px; height: 400px;"></div>
 <div id="dayofweek" style="float: left; max-width: 600px; height: 400px;"></div>
@@ -41,12 +41,5 @@
 <div id="year" style="float: left; max-width: 600px; height: 400px;"></div>
 <div id="timezone" style="float: left; max-width: 600px; height: 400px;"></div>
 
-<!-- comment old tables
-<div class="vtable" style="float: left;"><table><tr><th>Month</th><th>Commits</th><th>Lines added</th><th>Lines removed</th></tr><tr><td>2012-09</td><td>2</td><td>4</td><td>3</td></tr><tr><td>2012-08</td><td>8</td><td>3875</td><td>786</td></tr><tr><td>2012-07</td><td>17</td><td>1277</td><td>960</td></tr><tr><td>2012-06</td><td>15</td><td>1060</td><td>126</td></tr><tr><td>2012-05</td><td>34</td><td>3698</td><td>3713</td></tr><tr><td>2012-04</td><td>101</td><td>11592</td><td>3343</td></tr><tr><td>2012-03</td><td>41</td><td>15700</td><td>7445</td></tr><tr><td>2012-02</td><td>27</td><td>5006</td><td>1765</td></tr><tr><td>2012-01</td><td>41</td><td>7767</td><td>1997</td></tr><tr><td>2011-12</td><td>21</td><td>4482</td><td>2192</td></tr><tr><td>2011-11</td><td>28</td><td>85776</td><td>37308</td></tr></table></div>
 
-<div class="vtable" style="float: left;"><table><tr><th>Year</th><th>Commits (% of all)</th><th>Lines added</th><th>Lines removed</th></tr><tr><td>2012</td><td>286 (85.37%)</td><td>49979</td><td>20138</td></tr><tr><td>2011</td><td>49 (14.63%)</td><td>90258</td><td>39500</td></tr></table></div>
-
-<div class="vtable" style="float: left;">
-<table><tr><th>Timezone</th><th>Commits</th><tr><th>+0100</th><td style="background-color: rgb(227, 0, 0)">147</td></tr><tr><th>+0200</th><td style="background-color: rgb(255, 0, 0)">188</td></tr></tr></table></div>
--->
 </body></html>

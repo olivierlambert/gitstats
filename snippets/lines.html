@@ -6,9 +6,9 @@
 	<link rel="stylesheet" href="gitstats.css" type="text/css" />
 	<meta name="generator" content="GitStats e6b3058" />
 	<script type="text/javascript" src="sortable.js"></script>
-    <script src="jquery.js" type="text/javascript"></script>
-	<script src="js/highcharts.js"></script>
-    <script src="js/modules/exporting.js"></script>
+    <script type="text/javascript" src="jquery.js" ></script>
+	<script type="text/javascript" src="js/highcharts.js"></script>
+    <script type="text/javascript" src="js/modules/exporting.js"></script>
 </head>
 <body>
 <h1>Lines</h1>
@@ -25,13 +25,17 @@
 <dl>
 <dt>Total lines</dt><dd>80599</dd></dl>
 
+
+<!-- load the graph data -->
+<script src="graphs/files/files_data.js" type="text/javascript"></script>
 <!-- calculate the graphs -->
 <script src="graphs/files/monthofyear.js" type="text/javascript"></script>
+<script src="graphs/files/linesofcode.js" type="text/javascript"></script>
+
 
 <h2><a href="#commits" name="commits">Lines activity</a></h2>
 
 <!-- render the graphs -->
 <div id="container" style="float: left; max-width: 600px; height: 400px;"></div>
-
-
-<img src="lines_of_code.png" /></body></html>
+<div id="linesofcode" style="float: left; min-width: 600px; height: 400px;"></div>
+</body></html>
