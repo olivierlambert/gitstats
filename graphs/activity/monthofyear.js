@@ -21,16 +21,6 @@ $(function () {
                     text: 'Commits'
                 }
             },
-            legend: {
-                layout: 'vertical',
-                backgroundColor: '#FFFFFF',
-                align: 'left',
-                verticalAlign: 'top',
-                x: 100,
-                y: 70,
-                floating: true,
-                shadow: true
-            },
             tooltip: {
                 formatter: function() {
                     return ''+

@@ -13,23 +13,13 @@ $(function () {
                 text: 'Commits per year'
             },
             xAxis: {
-                categories: categories_years
+                categories: year_categories
             },
             yAxis: {
                 min: 0,
                 title: {
                     text: 'Commits'
                 }
-            },
-            legend: {
-                layout: 'vertical',
-                backgroundColor: '#FFFFFF',
-                align: 'left',
-                verticalAlign: 'top',
-                x: 100,
-                y: 70,
-                floating: true,
-                shadow: true
             },
             tooltip: {
                 formatter: function() {
@@ -45,7 +35,7 @@ $(function () {
             },
                 series: [{
                 name: 'Commits',
-                data: categories_data   
+                data: year_data   
             }]
         });
     });

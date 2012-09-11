@@ -1,5 +1,5 @@
 $(function () {
-	 Highcharts.setOptions({
+Highcharts.setOptions({
      colors: ['firebrick', 'maroon', 'darkred', '#555', '#444', '#333', '#222', '#111', '#000']
     });
     var chart;
@@ -21,16 +21,6 @@ $(function () {
                     text: 'Commits'
                 }
             },
-            legend: {
-                layout: 'vertical',
-                backgroundColor: '#FFFFFF',
-                align: 'left',
-                verticalAlign: 'top',
-                x: 100,
-                y: 70,
-                floating: true,
-                shadow: true
-            },
             tooltip: {
                 formatter: function() {
                     return ''+
@@ -45,7 +35,7 @@ $(function () {
             },
                 series: [{
                 name: 'Commits',
-                data: dayofweek_data 
+                data: dayofweek_data
             }]
         });
     });

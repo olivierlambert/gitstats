@@ -37,7 +37,7 @@ $(function () {
             tooltip: {
                 formatter: function() {
                     return ''+
-                        this.x +': '+ this.y +' commits';
+                        this.x +' weeks ago: '+ this.y +' commits';
                 }
             },
             plotOptions: {
