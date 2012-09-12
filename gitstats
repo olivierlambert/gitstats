@@ -893,16 +893,87 @@ class HTMLReportCreator(ReportCreator):
 		###########################
 		###
 		# Authors
-		fp = open(path + '/graphs/activity/authors_data.js', 'a')
+		fp = open(path + '/graphs/authors/authors_data.js', 'a')
 		f = open(path + '/authors.html', 'w')
 		self.printHeader(f)
 
 		f.write('<h1>%s Authors</h1>' % (data.projectname))
 		self.printNav(f)
 
+		f.write('<script src="graphs/authors/authors_data.js" type="text/javascript"></script>')
+		
+		f.write('<script src="graphs/authors/authorcontrib.js" type="text/javascript"></script>')
+		f.write('<script src="graphs/authors/authorlines.js" type="text/javascript"></script>')
+		f.write('<script src="graphs/authors/authorcommits.js" type="text/javascript"></script>')
+
+
+
 		# Authors :: List of authors
 		f.write(html_header(2, 'List of Authors'))
+		f.write('<div id="authorcontrib" style="float: left; max-width: 600px; height: 400px;"></div>')
+		f.write('<div id="authorlines" style="float: left; max-width: 600px; height: 400px;"></div>')
+		f.write('<div id="authorcommits" style="float: left; max-width: 600px; height: 400px;"></div>')
+		
+		## author % of commits pie chart
+		allauthors = data.getAuthors()
+		nbauth = conf['authors_top']
+		if len(allauthors) < conf['authors_top']:
+			nbauth = len(allauthors)
+		fp.write('var authorcontrib_data = [')
+		i = 0;
+		for author in data.getAuthors(conf['max_authors']):
+			info = data.getAuthorInfo(author)
+			fp.write('[\'%s\',%d]' % (author,info['commits']))
+			if i != nbauth - 1:
+				fp.write(',')
+			else:
+				fp.write('];\n')
+			i = i+1
+		
+		## line of code per author
+		lines_by_authors = {} # cumulated added lines by
+		# author. to save memory,
+		# changes_by_date_by_author[stamp][author] is defined
+		# only at points where author commits.
+		# lines_by_authors allows us to generate all the
+		# points in the .dat file.
 
+		# Don't rely on getAuthors to give the same order each
+		# time. Be robust and keep the list in a variable.
+		commits_by_authors = {} # cumulated added lines by
+		# WORK IN PROGRESS
+		#fp.write('var authorlines_categories = [')
+		#self.authors_to_plot = data.getAuthors(conf['max_authors'])
+		#nbchanges = len(sorted(data.changes_by_date_by_author.keys()))
+		#for author in self.authors_to_plot:
+			#lines_by_authors[author] = 0
+			#commits_by_authors[author] = 0
+			#for stamp in sorted(data.changes_by_date_by_author.keys()):
+				#fp.write('%d' % stamp)
+				#if i != nbchanges - 1:
+					#fp.write(',')
+				#else:
+					#fp.write('];\n')
+				#i = i+1
+						
+		#fp.write('var authorlines_data = [')
+		#stamp = None
+		#for stamp in sorted(data.changes_by_date_by_author.keys()):
+			#for author in self.authors_to_plot:
+				#if author in data.changes_by_date_by_author[stamp].keys():
+					#lines_by_authors[author] = data.changes_by_date_by_author[stamp][author]['lines_added']
+					#commits_by_authors[author] = data.changes_by_date_by_author[stamp][author]['commits']
+				#fp.write(' %d' % lines_by_authors[author])
+				#if i != nbchanges - 1:
+					#fp.write(',')
+				#else:
+					#fp.write('];\n')
+				#i = i+1
+		
+		
+		fp.close()
+		
+				
 		f.write('<table class="authors sortable" id="authors">')
 		f.write('<tr><th>Author</th><th>Commits (%)</th><th>+ lines</th><th>- lines</th><th>First commit</th><th>Last commit</th><th class="unsortable">Age</th><th>Active days</th><th># by commits</th></tr>')
 		for author in data.getAuthors(conf['max_authors']):
@@ -910,12 +981,10 @@ class HTMLReportCreator(ReportCreator):
 			f.write('<tr><td>%s</td><td>%d (%.2f%%)</td><td>%d</td><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%d</td><td>%d</td></tr>' % (author, info['commits'], info['commits_frac'], info['lines_added'], info['lines_removed'], info['date_first'], info['date_last'], info['timedelta'], len(info['active_days']), info['place_by_commits']))
 		f.write('</table>')
 
-		allauthors = data.getAuthors()
+		
 		if len(allauthors) > conf['max_authors']:
 			rest = allauthors[conf['max_authors']:]
 			f.write('<p class="moreauthors">These didn\'t make it to the top: %s</p>' % ', '.join(rest))
-
-		## line of code per author
 		
 		f.write(html_header(2, 'Cumulated Added Lines of Code per Author'))
 		f.write('<img src="lines_of_code_by_author.png" alt="Lines of code per Author" />')
@@ -927,37 +996,7 @@ class HTMLReportCreator(ReportCreator):
 		if len(allauthors) > conf['max_authors']:
 			f.write('<p class="moreauthors">Only top %d authors shown</p>' % conf['max_authors'])
 
-		fgl = open(path + '/lines_of_code_by_author.dat', 'w')
-		fgc = open(path + '/commits_by_author.dat', 'w')
 
-		lines_by_authors = {} # cumulated added lines by
-		# author. to save memory,
-		# changes_by_date_by_author[stamp][author] is defined
-		# only at points where author commits.
-		# lines_by_authors allows us to generate all the
-		# points in the .dat file.
-
-		# Don't rely on getAuthors to give the same order each
-		# time. Be robust and keep the list in a variable.
-		commits_by_authors = {} # cumulated added lines by
-
-		self.authors_to_plot = data.getAuthors(conf['max_authors'])
-		for author in self.authors_to_plot:
-			lines_by_authors[author] = 0
-			commits_by_authors[author] = 0
-		for stamp in sorted(data.changes_by_date_by_author.keys()):
-			fgl.write('%d' % stamp)
-			fgc.write('%d' % stamp)
-			for author in self.authors_to_plot:
-				if author in data.changes_by_date_by_author[stamp].keys():
-					lines_by_authors[author] = data.changes_by_date_by_author[stamp][author]['lines_added']
-					commits_by_authors[author] = data.changes_by_date_by_author[stamp][author]['commits']
-				fgl.write(' %d' % lines_by_authors[author])
-				fgc.write(' %d' % commits_by_authors[author])
-			fgl.write('\n')
-			fgc.write('\n')
-		fgl.close()
-		fgc.close()
 
 		# Authors :: Author of Month
 		f.write(html_header(2, 'Author of Month'))
