@@ -7,7 +7,7 @@ $(function () {
         chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'weekly',
-                type: 'line'
+                type: 'column'
             },
             title: {
                 text: 'Last 32 weeks'

@@ -1,43 +1,52 @@
 $(function () {
-Highcharts.setOptions({
-     colors: ['firebrick', 'maroon', 'darkred', '#555', '#444', '#333', '#222', '#111', '#000']
-    });
     var chart;
     $(document).ready(function() {
+		
+    	// Radialize the colors
+		Highcharts.getOptions().colors = $.map(Highcharts.getOptions().colors, function(color) {
+		    return {
+		        radialGradient: { cx: 0.5, cy: 0.3, r: 0.7 },
+		        stops: [
+		            [0, color],
+		            [1, Highcharts.Color(color).brighten(-0.8).get('rgb')] // darken
+		        ]
+		    };
+		});		
         chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'dayofweek',
-                type: 'column'
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
             },
             title: {
-                text: 'Commits per day of week'
-            },
-            xAxis: {
-                categories: dayofweek_categories
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Commits'
-                }
+                text: 'Commit % per day of week'
             },
             tooltip: {
-                formatter: function() {
-                    return ''+
-                        this.x +': '+ this.y +' commits';
-                }
+        	    pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+            	percentageDecimals: 1
             },
             plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+							if (this.point.percentage > 5) { // do not draw if non significative (<5%)
+	                            return '<b>'+ this.point.name +'</b>';
+							}
+                        }
+                    }
                 }
             },
-                series: [{
-                name: 'Commits',
+            series: [{
+                type: 'pie',
+                name: 'Day of week',
                 data: dayofweek_data
-            }]
+			}]
         });
-    });
-    
+    }); 
 });

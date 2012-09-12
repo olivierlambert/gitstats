@@ -737,7 +737,7 @@ class HTMLReportCreator(ReportCreator):
 		# Activity
 		f = open(path + '/activity.html', 'w')
 		self.printHeader(f)
-		f.write('<h1>Activity</h1>')
+		f.write('<h1>%s Activity</h1>' % (data.projectname))
 		self.printNav(f)
 
 		#f.write('<h2>Last 30 days</h2>')
@@ -785,44 +785,44 @@ class HTMLReportCreator(ReportCreator):
 				fp.write('];\n')
 
 				
-		# Hour of Day
+		# Hour of Day spline
 		hour_of_day = data.getActivityByHourOfDay()
 		
-		fp.write('var hourofday_data = [')
+		fp.write('var hourofday_categories = [')
 		for i in range(0, 24):
 			if i in hour_of_day:
-				fp.write('[\'%d h\',%d]' % (i + 1, hour_of_day[i]))
+				fp.write('\'%d h\'' % (i + 1))
 			else:
-				fp.write('[\'%d h\',0]' % (i + 1))
+				fp.write('\'%d h\'' % (i + 1))
 			if i != 23:
 				fp.write(',')
 			else:
 				fp.write('];\n')
-
-
-				
-		# Day of Week
-		day_of_week = data.getActivityByDayOfWeek()
 		
-		fp.write('var dayofweek_categories = [')
+		fp.write('var hourofday_data = [')
+		for i in range(0, 24):
+			if i in hour_of_day:
+				fp.write('%d' % (hour_of_day[i]))
+			else:
+				fp.write('0')
+			if i != 23:
+				fp.write(',')
+			else:
+				fp.write('];\n')
+				
+		# Day of week pie chart
+		day_of_week = data.getActivityByDayOfWeek()
+		fp.write('var dayofweek_data = [')
 		for i in range(0, 7):
-			fp.write('\'%s\'' % (WEEKDAYS[i]))
+			commits = 0
+			if i in day_of_week:
+				commits = day_of_week[i]
+			fp.write('[\'%s\',%d]' % (WEEKDAYS[i],commits))
 			if i != 6:
 				fp.write(',')
 			else:
 				fp.write('];\n')
 				
-		fp.write('var dayofweek_data = [')
-		for d in range(0, 7):
-			commits = 0
-			if d in day_of_week:
-				commits = day_of_week[d]
-			fp.write('%d' % (commits))
-			if d != 6:
-				fp.write(',')
-			else:
-				fp.write('];\n')
-
 		# Hour of Week
 		# removed : todo punchcard
 
@@ -887,18 +887,17 @@ class HTMLReportCreator(ReportCreator):
 			element = element+1
 				
 		fp.close()	
-		###########################
-		
-		
 		f.write('</body></html>')
-		f.close()
-
+		
+		
+		###########################
 		###
 		# Authors
+		fp = open(path + '/graphs/activity/authors_data.js', 'a')
 		f = open(path + '/authors.html', 'w')
 		self.printHeader(f)
 
-		f.write('<h1>Authors</h1>')
+		f.write('<h1>%s Authors</h1>' % (data.projectname))
 		self.printNav(f)
 
 		# Authors :: List of authors
@@ -916,6 +915,8 @@ class HTMLReportCreator(ReportCreator):
 			rest = allauthors[conf['max_authors']:]
 			f.write('<p class="moreauthors">These didn\'t make it to the top: %s</p>' % ', '.join(rest))
 
+		## line of code per author
+		
 		f.write(html_header(2, 'Cumulated Added Lines of Code per Author'))
 		f.write('<img src="lines_of_code_by_author.png" alt="Lines of code per Author" />')
 		if len(allauthors) > conf['max_authors']:
@@ -998,7 +999,7 @@ class HTMLReportCreator(ReportCreator):
 			n += 1
 			info = data.getDomainInfo(domain)
 			fp.write('%s %d %d\n' % (domain, n , info['commits']))
-			f.write('<tr><th>%s</th><td>%d (%.2f%%)</td></tr>' % (domain, info['commits'], (100.0 * info['commits'] / totalcommits)))
+			f.write('<tr><th>%s</th><td>%d (%.2f%%)</td></tr>' % (domain, info['commits'], (100.0 * info['commits'] / 100)))
 		f.write('</table></div>')
 		f.write('<img src="domains.png" alt="Commits by Domains" />')
 		fp.close()
@@ -1310,6 +1311,7 @@ plot """
 """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <head>
 	<title>GitStats - %s</title>
 	<link rel="stylesheet" href="%s" type="text/css" />
@@ -1416,4 +1418,3 @@ Default config values:
 if __name__=='__main__':
 	g = GitStats()
 	g.run(sys.argv[1:])
-
