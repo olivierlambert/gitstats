@@ -853,7 +853,7 @@ class HTMLReportCreator(ReportCreator):
 		fp.write('var year_categories = [')
 		size = len(data.commits_by_year.keys())
 		element = 0
-		for yy in reversed(sorted(data.commits_by_year.keys())):
+		for yy in sorted(data.commits_by_year.keys()):
 			fp.write('\'%s\'' % (yy))
 			if element != size - 1:
 				fp.write(',')
